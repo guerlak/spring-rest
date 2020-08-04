@@ -4,6 +4,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,8 +31,8 @@ public class UserResource {
 
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> listUsers() {
-		List<UserDTO> list = service.findAll().stream().map(cat -> new UserDTO(cat.getId(),
-				cat.getName(), cat.getEmail(), cat.getPhone())).collect(Collectors.toList());
+		List<UserDTO> list = service.findAll().stream().map(user -> new UserDTO(user.getId(),
+				user.getName(), user.getEmail(), user.getPhone(), user.getPassword())).collect(Collectors.toList());
 		return ResponseEntity.ok().body(list);
 	}
 
@@ -41,7 +43,8 @@ public class UserResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<User> addUser(@RequestBody User user) {
+	public ResponseEntity<User> addUser(@Valid @RequestBody UserDTO userDTO) {
+		User user = new User(null, userDTO.getEmail(), userDTO.getEmail(), userDTO.getPhone(), userDTO.getPassword());
 		User u = service.addUser(user);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(u.getId()).toUri();
 		return ResponseEntity.created(uri).body(u);
