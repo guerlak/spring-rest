@@ -2,6 +2,7 @@ package com.guerlak.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.guerlak.model.User;
+import com.guerlak.model.dto.UserDTO;
 import com.guerlak.service.UserService;
 
 @RestController
@@ -26,8 +28,9 @@ public class UserResource {
 	private UserService service;
 
 	@GetMapping
-	public ResponseEntity<List<User>> listUsers() {
-		List<User> list = service.findAll();
+	public ResponseEntity<List<UserDTO>> listUsers() {
+		List<UserDTO> list = service.findAll().stream().map(cat -> new UserDTO(cat.getId(),
+				cat.getName(), cat.getEmail(), cat.getPhone())).collect(Collectors.toList());
 		return ResponseEntity.ok().body(list);
 	}
 

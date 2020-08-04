@@ -20,11 +20,8 @@ public class OrderService {
 	}
 
 	public Order findById(Long id) {
-
 		Optional<Order> obj = repo.findById(id);
-
 		return obj.get();
-
 	}
 
 }

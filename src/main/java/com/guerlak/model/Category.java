@@ -23,9 +23,11 @@ public class Category implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
+	
 	private String name;
 	
-	@JsonIgnore	@ManyToMany(mappedBy = "categories")
+	@JsonIgnore	
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {}

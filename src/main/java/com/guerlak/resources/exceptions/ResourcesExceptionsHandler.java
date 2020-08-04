@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.guerlak.service.exceptions.DataIntegrityException;
 import com.guerlak.service.exceptions.DatabaseException;
 import com.guerlak.service.exceptions.ResourceNotFoundException;
 
@@ -26,6 +27,14 @@ public class ResourcesExceptionsHandler {
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<StandardError> database(DatabaseException e, HttpServletRequest req){
 		String error = "Database error.";
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), req.getRequestURI());
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(DataIntegrityException.class)
+	public ResponseEntity<StandardError> dataIntegrity(DataIntegrityException e, HttpServletRequest req){
+		String error = "Data Integrity Error.";
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		StandardError err = new StandardError(Instant.now(), status.value(), error, e.getMessage(), req.getRequestURI());
 		return ResponseEntity.status(status).body(err);
