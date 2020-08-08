@@ -2,8 +2,12 @@ package com.guerlak.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +18,9 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="tb_user")
-public class User implements Serializable{
-	
+@Table(name = "tb_user")
+public class User implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -24,23 +28,34 @@ public class User implements Serializable{
 	private Long id;
 	private String name;
 	private String email;
-	private String phone;
+
 	private String password;
-	
+
+	@ElementCollection
+	@CollectionTable(name = "tb_PHONE") // to create the table without object relation
+	private Set<String> phones = new HashSet<String>();
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "client")
 	private List<Order> orders = new ArrayList<>();
+
 	
+	@OneToMany(mappedBy = "user")
+	private List<Address> adresses = new ArrayList<>();
+
 	public User() {
 	}
 
-	public User(Long id, String name, String email, String phone, String password) {
+	public User(Long id, String name, String email, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
-		this.phone = phone;
 		this.password = password;
+	}
+
+	public List<Address> getAdresses() {
+		return adresses;
 	}
 
 	public Long getId() {
@@ -67,12 +82,12 @@ public class User implements Serializable{
 		this.email = email;
 	}
 
-	public String getPhone() {
-		return phone;
+	public Set<String> getPhones() {
+		return phones;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setPhones(Set<String> phones) {
+		this.phones = phones;
 	}
 
 	public String getPassword() {
@@ -86,7 +101,6 @@ public class User implements Serializable{
 	public List<Order> getOrders() {
 		return orders;
 	}
-
 
 	@Override
 	public int hashCode() {

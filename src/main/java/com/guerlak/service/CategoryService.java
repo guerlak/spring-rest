@@ -42,9 +42,10 @@ public class CategoryService {
 	}
 
 	public Category update(Category cat) {
-		findById(cat.getId());
-		Category categotyCreated = repo.save(cat);
-		return categotyCreated;
+		Category catUpdate = findById(cat.getId());
+		catUpdate.setName(cat.getName());
+		repo.save(catUpdate);
+		return catUpdate;
 	}
 
 	public void delete(Long id) {

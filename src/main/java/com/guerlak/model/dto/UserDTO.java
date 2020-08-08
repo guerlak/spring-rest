@@ -4,32 +4,32 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.guerlak.model.User;
+
 public class UserDTO {
 	
 	private Long id;
-	@NotEmpty(message = "preenchimento obrigatório")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	@Length(min=5, max=60, message = "deve ser entre 5 e 60 chars")
 	private String name;
-	@NotEmpty(message = "preenchimento obrigatório")
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String email;
 	@Length(min=5, max=10, message = "Obrigatório e deve ser entre 5 e 10 chars")
 	private String password;
 	
 	private String phone;
-
 	
+
 	public UserDTO() {
 	}
 
-	public UserDTO(Long id, String name, String email, String phone, String password) {
+	public UserDTO(User user) {
 		super();
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.phone = phone;
-		
+		this.id = user.getId();
+		this.name = user.getName();
+		this.email = user.getEmail();
 	}
+	
 
 	public Long getId() {
 		return id;
@@ -50,11 +50,9 @@ public class UserDTO {
 		this.name = name;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
-
 
 	public void setEmail(String email) {
 		this.email = email;

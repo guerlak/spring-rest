@@ -12,6 +12,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -96,7 +97,7 @@ public class Product {
 		this.imgUrl = imgUrl;
 	}
 
-	@javax.persistence.Transient
+	@Transient
 	public Set<Category> getCategories() {
 		return categories;
 	}
