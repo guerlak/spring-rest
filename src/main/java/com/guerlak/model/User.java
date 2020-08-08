@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -28,7 +29,6 @@ public class User implements Serializable {
 	private Long id;
 	private String name;
 	private String email;
-
 	private String password;
 
 	@ElementCollection
@@ -39,8 +39,7 @@ public class User implements Serializable {
 	@OneToMany(mappedBy = "client")
 	private List<Order> orders = new ArrayList<>();
 
-	
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> adresses = new ArrayList<>();
 
 	public User() {

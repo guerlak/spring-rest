@@ -19,7 +19,7 @@ import com.guerlak.model.User;
 import com.guerlak.model.dto.NewUserDTO;
 import com.guerlak.repositories.AddressRepo;
 import com.guerlak.repositories.UserRepo;
-import com.guerlak.service.exceptions.DatabaseException;
+import com.guerlak.service.exceptions.DataIntegrityException;
 import com.guerlak.service.exceptions.ResourceNotFoundException;
 
 @Service
@@ -53,16 +53,6 @@ public class UserService {
 		return repo.save(u);
 	}
 
-	public void deleteUser(Long id) {
-		try {
-			repo.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new ResourceNotFoundException(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException(e.getMessage());
-		}
-	}
-
 	public User updateUser(Long id, User user) {
 		try {
 			User entity = repo.getOne(id);
@@ -77,6 +67,16 @@ public class UserService {
 		entity.setEmail(u.getEmail());
 		entity.setName(u.getName());
 		entity.setPhones(u.getPhones());
+	}
+	
+	public void deleteUser(Long id) {
+		try {
+			repo.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("There are relations betweend entities that can not be deleted.");
+		}
 	}
 
 	public User fromDTO(NewUserDTO userDTO) {
