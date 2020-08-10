@@ -50,8 +50,8 @@ public class TestConfig implements CommandLineRunner{
 		Address ad1 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro", "Onda Carioca 202 bl 4", "222222");
 		Address ad2 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro","Guedes da Fontoura, 441", "22222");
 		
-		u1.getAdresses().add(ad1);
-		u1.getAdresses().add(ad2);
+		u1.getAddresses().add(ad1);
+		u1.getAddresses().add(ad2);
 		
 		u1.setUserType(UserType.PESSOA_FISICA);
 		

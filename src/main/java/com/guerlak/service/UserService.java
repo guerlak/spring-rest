@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.guerlak.model.Address;
 import com.guerlak.model.User;
 import com.guerlak.model.dto.NewUserDTO;
+import com.guerlak.model.dto.UserDTO;
 import com.guerlak.model.enums.UserType;
 import com.guerlak.repositories.AddressRepo;
 import com.guerlak.repositories.UserRepo;
@@ -50,24 +51,23 @@ public class UserService {
 	public User addUser(User u) {
 		u.setId(null);
 		u = repo.save(u);
-		addressRepo.saveAll(u.getAdresses());
+		addressRepo.saveAll(u.getAddresses());
 		return repo.save(u);
 	}
 
-	public User updateUser(Long id, User user) {
+	public User updateUser(Long id, UserDTO dto) {
 		try {
 			User entity = repo.getOne(id);
-			this.updateData(entity, user);
+			this.updateData(entity, dto);
 			return repo.save(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundException(id);
 		}
 	}
 
-	public void updateData(User entity, User u) {
+	public void updateData(User entity, UserDTO u) {
 		entity.setEmail(u.getEmail());
 		entity.setName(u.getName());
-		entity.setPhones(u.getPhones());
 	}
 	
 	public void deleteUser(Long id) {
@@ -92,7 +92,7 @@ public class UserService {
 				userDTO.getComplement(),
 				userDTO.getCep());
 		
-		user.getAdresses().add(address);
+		user.getAddresses().add(address);
 		user.getPhones().add(userDTO.getPhone1());
 
 		if (userDTO.getPhone2() != null) {

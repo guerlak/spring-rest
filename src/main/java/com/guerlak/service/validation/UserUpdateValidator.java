@@ -2,59 +2,54 @@ package com.guerlak.service.validation;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.HandlerMapping;
 
 import com.guerlak.model.User;
-import com.guerlak.model.dto.NewUserDTO;
+import com.guerlak.model.dto.UserDTO;
 import com.guerlak.repositories.UserRepo;
-import com.guerlak.service.validation.util.BR;
 
-public class UserInsertValidator implements ConstraintValidator<UserInsert, NewUserDTO> {
-	
+public class UserUpdateValidator implements ConstraintValidator<UserUpdate, UserDTO> {
+
 	@Autowired
 	private UserRepo userRepo;
 	
+	@Autowired
+	HttpServletRequest req;
+
 	@Override
-	public void initialize(UserInsert ann) {
+	public void initialize(UserUpdate ann) {
 	}
 
 	@Override
-	public boolean isValid(NewUserDTO objDto, ConstraintValidatorContext context) {
-		
+	public boolean isValid(UserDTO objDto, ConstraintValidatorContext context) {
+
+		@SuppressWarnings("unchecked")
+		Map<String, String> map = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		List<FieldMessage> list = new ArrayList<>();
 		
-		//Validations errors
-		if(objDto.getUserType() == null) {
-			list.add(new FieldMessage("userType", "Mandatory field: PESSOA_FISICA or PESSOA_JURIDICA"));
-		}
-		
-		if(objDto.getUserType().equals("PESSOA_JURIDICA") && !BR.isValidCNPJ(objDto.getCpfCnpj())) {
-			list.add(new FieldMessage("cpfCnpj", "Invalid CNPJ"));
-		}
-		
-		if(objDto.getUserType().equals("PESSOA_FISICA") && !BR.isValidCPF(objDto.getCpfCnpj())) {
-			list.add(new FieldMessage("cpfCnpj", "Invalid CPF"));
-		}
-		
-		User check = userRepo.findByEmail(objDto.getEmail());
-		
-		if(check != null) {
+		Integer uId = Integer.parseInt(map.get("id"));
+
+		User checkUserExist = userRepo.findByEmail(objDto.getEmail());
+
+		if (checkUserExist.getId().equals(uId) && checkUserExist != null) {
 			list.add(new FieldMessage("email", "this email already exists"));
 		}
-		
-		//adding custom erros to the framework
-		//this allows to get these erros in ResourcesExceptionsHandler
+
+		// adding custom erros to the framework
+		// this allows to get these erros in ResourcesExceptionsHandler
 		for (FieldMessage e : list) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(e.getMessage())
-					.addPropertyNode(e.getFieldName())
+			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getFieldName())
 					.addConstraintViolation();
 		}
-		
+
 		return list.isEmpty();
 	}
 

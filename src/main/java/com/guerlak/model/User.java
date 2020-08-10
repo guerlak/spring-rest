@@ -8,6 +8,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,6 +30,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
+	@Column(unique = true)
 	private String email;
 	private String password;
 
@@ -43,7 +45,7 @@ public class User implements Serializable {
 	private List<Order> orders = new ArrayList<>();
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Address> adresses = new ArrayList<>();
+	private List<Address> addresses = new ArrayList<>();
 
 	public User() {
 	}
@@ -57,8 +59,12 @@ public class User implements Serializable {
 		setUserType(userType);
 	}
 
-	public List<Address> getAdresses() {
-		return adresses;
+	public List<Address> getAddresses() {
+		return addresses;
+	}
+	
+	public void setAddresses(List<Address> addresses) {
+		this.addresses = addresses;
 	}
 
 	public Long getId() {
@@ -101,8 +107,8 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public int getUserType() {
-		return userType;
+	public UserType getUserType() {
+		return UserType.valueOf(userType);
 	}
 
 	public void setUserType(UserType userType) {
