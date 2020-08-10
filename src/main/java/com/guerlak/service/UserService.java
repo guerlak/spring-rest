@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.guerlak.model.Address;
 import com.guerlak.model.User;
 import com.guerlak.model.dto.NewUserDTO;
+import com.guerlak.model.enums.UserType;
 import com.guerlak.repositories.AddressRepo;
 import com.guerlak.repositories.UserRepo;
 import com.guerlak.service.exceptions.DataIntegrityException;
@@ -75,12 +76,16 @@ public class UserService {
 		} catch (EmptyResultDataAccessException e) {
 			throw new ResourceNotFoundException(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DataIntegrityException("There are relations betweend entities that can not be deleted.");
+			throw new DataIntegrityException("There are orders relation. Entity can not be deleted.");
 		}
 	}
 
 	public User fromDTO(NewUserDTO userDTO) {
-		User user = new User(null, userDTO.getName(), userDTO.getEmail(), userDTO.getPassword());
+		User user = new User(null, userDTO.getName(), 
+				userDTO.getEmail(), 
+				userDTO.getPassword(), 
+				UserType.valueOf(userDTO.getUserType()));
+		
 		Address address = new Address(user, 
 				userDTO.getCity(), 
 				userDTO.getState(), 

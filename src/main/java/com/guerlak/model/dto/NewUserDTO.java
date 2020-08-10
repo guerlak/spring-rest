@@ -2,26 +2,48 @@ package com.guerlak.model.dto;
 
 import java.io.Serializable;
 
-public class NewUserDTO implements Serializable {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.guerlak.service.validation.UserInsert;
+
+@UserInsert
+public class NewUserDTO implements Serializable {	
 
 	private static final long serialVersionUID = 1L;
 	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min=5, max=60, message = "deve ser entre 5 e 60 chars")
 	private String name;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min=5, max=20, message = "deve ser entre 5 e 20 chars")
+	@Email
 	private String email;
-	private String phone;
+
 	private String password;
 	
+	private String userType;
+	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min=3, max=20, message = "deve ser entre 3 e 20 chars")
 	private String city;
 	private String state;
 	private String complement;
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min=7, max=10, message = "deve ser entre 9 e 11 chars")
 	private String cep;
 	
+	@NotEmpty(message = "Preenchimento obrigatório")
+	@Length(min=5, max=10, message = "deve ser entre 5 e 10 chars")
 	private String phone1;
 	private String phone2;
 	private String phone3;
+
+	private String cpfCnpj;
 	
 	public NewUserDTO() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getName() {
@@ -40,20 +62,28 @@ public class NewUserDTO implements Serializable {
 		this.email = email;
 	}
 
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public String getCpfCnpj() {
+		return cpfCnpj;
+	}
+
+	public void setCpfCnpj(String cpfCnpj) {
+		this.cpfCnpj = cpfCnpj;
 	}
 
 	public String getCity() {

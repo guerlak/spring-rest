@@ -20,11 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.guerlak.model.Address;
 import com.guerlak.model.User;
 import com.guerlak.model.dto.NewUserDTO;
 import com.guerlak.model.dto.UserDTO;
-import com.guerlak.repositories.AddressRepo;
 import com.guerlak.service.UserService;
 
 @RestController
@@ -34,9 +32,6 @@ public class UserResource {
 	@Autowired
 	private UserService service;
 
-	@Autowired
-	private AddressRepo addressRepo;
-
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> listUsers() {
 		List<UserDTO> list = (List<UserDTO>) service.findAll().stream().map(user -> new UserDTO(user))
@@ -45,10 +40,10 @@ public class UserResource {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<User> getUser(@PathVariable Long id) {
+	public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
 		User u = service.findById(id);
-		
-		return ResponseEntity.ok().body(u);
+		UserDTO dto = new UserDTO(u);
+		return ResponseEntity.ok().body(dto);
 	}
 
 	@GetMapping("/page")

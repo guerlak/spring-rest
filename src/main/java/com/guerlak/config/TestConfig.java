@@ -16,6 +16,7 @@ import com.guerlak.model.Payment;
 import com.guerlak.model.Product;
 import com.guerlak.model.User;
 import com.guerlak.model.enums.OrderStatus;
+import com.guerlak.model.enums.UserType;
 import com.guerlak.repositories.AddressRepo;
 import com.guerlak.repositories.CategoryRepo;
 import com.guerlak.repositories.OrderItemRepo;
@@ -43,14 +44,16 @@ public class TestConfig implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "123456");
-		User u2 = new User(null, "Alex Green", "alex@gmail.com", "123456"); 
+		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "123456",UserType.PESSOA_FISICA);
+		User u2 = new User(null, "Alex Green", "alex@gmail.com", "123456", UserType.PESSOA_FISICA); 
 		
 		Address ad1 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro", "Onda Carioca 202 bl 4", "222222");
 		Address ad2 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro","Guedes da Fontoura, 441", "22222");
 		
 		u1.getAdresses().add(ad1);
 		u1.getAdresses().add(ad2);
+		
+		u1.setUserType(UserType.PESSOA_FISICA);
 		
 		userRepo.saveAll(Arrays.asList(u1, u2));
 		addressRepo.saveAll(Arrays.asList(ad1, ad2));

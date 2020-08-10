@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.guerlak.model.enums.UserType;
 
 @Entity
 @Table(name = "tb_user")
@@ -31,8 +32,10 @@ public class User implements Serializable {
 	private String email;
 	private String password;
 
+	private int userType;
+
 	@ElementCollection
-	@CollectionTable(name = "tb_PHONE") // to create the table without object relation
+	@CollectionTable(name = "tb_phone") // to create the table without object relation
 	private Set<String> phones = new HashSet<String>();
 
 	@JsonIgnore
@@ -45,12 +48,13 @@ public class User implements Serializable {
 	public User() {
 	}
 
-	public User(Long id, String name, String email, String password) {
+	public User(Long id, String name, String email, String password, UserType userType) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.password = password;
+		setUserType(userType);
 	}
 
 	public List<Address> getAdresses() {
@@ -95,6 +99,15 @@ public class User implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		if (userType != null)
+			this.userType = userType.getCode();
 	}
 
 	public List<Order> getOrders() {
