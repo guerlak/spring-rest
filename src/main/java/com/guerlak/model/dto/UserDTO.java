@@ -1,15 +1,9 @@
 package com.guerlak.model.dto;
 
-import java.util.List;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-
 import org.hibernate.validator.constraints.Length;
-
-import com.guerlak.model.Address;
 import com.guerlak.model.User;
-import com.guerlak.model.enums.UserType;
 import com.guerlak.service.validation.UserUpdate;
 
 @UserUpdate
@@ -24,8 +18,6 @@ private static final long serialVersionUID = 1L;
 	@Length(min=5, max=20, message = "deve ser entre 5 e 20 chars")
 	@Email
 	private String email;
-
-	
 
 	public UserDTO() {
 	}
@@ -50,5 +42,4 @@ private static final long serialVersionUID = 1L;
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 }

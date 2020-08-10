@@ -24,21 +24,22 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdate, User
 	HttpServletRequest req;
 
 	@Override
-	public void initialize(UserUpdate ann) {
-	}
+	public void initialize(UserUpdate ann) {}
 
 	@Override
 	public boolean isValid(UserDTO objDto, ConstraintValidatorContext context) {
 
 		@SuppressWarnings("unchecked")
 		Map<String, String> map = (Map<String, String>) req.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+		
 		List<FieldMessage> list = new ArrayList<>();
 		
 		Integer uId = Integer.parseInt(map.get("id"));
 
 		User checkUserExist = userRepo.findByEmail(objDto.getEmail());
 
-		if (checkUserExist.getId().equals(uId) && checkUserExist != null) {
+
+		if (checkUserExist != null && !checkUserExist.getId().equals(uId)) {
 			list.add(new FieldMessage("email", "this email already exists"));
 		}
 
@@ -46,7 +47,8 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdate, User
 		// this allows to get these erros in ResourcesExceptionsHandler
 		for (FieldMessage e : list) {
 			context.disableDefaultConstraintViolation();
-			context.buildConstraintViolationWithTemplate(e.getMessage()).addPropertyNode(e.getFieldName())
+			context.buildConstraintViolationWithTemplate(e.getMessage())
+					.addPropertyNode(e.getFieldName())
 					.addConstraintViolation();
 		}
 
@@ -54,6 +56,7 @@ public class UserUpdateValidator implements ConstraintValidator<UserUpdate, User
 	}
 
 	class FieldMessage {
+		
 		private String fieldName;
 		private String message;
 
