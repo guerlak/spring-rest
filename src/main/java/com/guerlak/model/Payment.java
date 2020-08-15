@@ -41,7 +41,6 @@ public class Payment implements Serializable{
 		this.order = order;
 	}
 
-
 	public Long getId() {
 		return id;
 	}

@@ -9,7 +9,7 @@
 		<version>2.3.1.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>com.guerlak</groupId>
 	<artifactId>product-manager-nelio</artifactId>
 	<version>1.0</version>
 	<name>product-manager-nelio</name>

@@ -13,6 +13,7 @@ import com.guerlak.model.Category;
 import com.guerlak.model.Product;
 import com.guerlak.repositories.CategoryRepo;
 import com.guerlak.repositories.ProductRepo;
+import com.guerlak.service.exceptions.ResourceNotFoundException;
 
 @Service
 public class ProductService {
@@ -23,13 +24,10 @@ public class ProductService {
 	@Autowired
 	private CategoryRepo categoryRepo;
 
-	public List<Product> findAll() {
-		return repo.findAll();
-	}
 
 	public Product findById(Long id) {
 		Optional<Product> obj = repo.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 
 	public Page<Product> search(String name, 

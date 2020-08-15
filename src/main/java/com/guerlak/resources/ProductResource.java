@@ -26,11 +26,6 @@ public class ProductResource {
 	@Autowired
 	private ProductService service;
 	
-	@GetMapping
-	public ResponseEntity<List<Product>> listProducts() {
-		List<Product> list = service.findAll();
-		return ResponseEntity.ok().body(list);
-	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Product> getProduct(@PathVariable Long id) {

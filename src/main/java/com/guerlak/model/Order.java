@@ -2,7 +2,7 @@ package com.guerlak.model;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Set;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -38,14 +38,12 @@ public class Order implements Serializable{
 	private Integer orderStatus;
 	
 	@OneToMany(mappedBy = "id.order") // Get the order of OrderItemPK
-	private Set<OrderItem> items;
+	private List<OrderItem> items;
 	
 	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
 	private Payment payment;
 	
-	public Order() {
-
-	}
+	public Order() {}
 
 	public Order(Long id, Instant moment, User client, OrderStatus orderStatus) {
 		super();
@@ -87,7 +85,7 @@ public class Order implements Serializable{
 		this.client = client;
 	}
 	
-	public Set<OrderItem> getItems(){
+	public List<OrderItem> getItems(){
 		return items;
 	}
 	
@@ -107,7 +105,19 @@ public class Order implements Serializable{
 	public void setPayment(Payment payment) {
 		this.payment = payment;
 	}
-	
-	
+
+	public void setOrderStatus(Integer orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public void setItems(List<OrderItem> items) {
+		this.items = items;
+	}
+
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", moment=" + moment + ", client=" + client + ", orderStatus=" + orderStatus
+				+ ", items=" + items + ", payment=" + payment + "]";
+	}
 
 }
