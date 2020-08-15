@@ -66,6 +66,7 @@ public class User implements Serializable {
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
 	}
+	
 
 	public Long getId() {
 		return id;

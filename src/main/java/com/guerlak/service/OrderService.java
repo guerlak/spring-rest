@@ -1,13 +1,17 @@
 package com.guerlak.service;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.guerlak.model.Address;
 import com.guerlak.model.Order;
 import com.guerlak.model.OrderItem;
 import com.guerlak.model.User;
@@ -41,6 +45,12 @@ public class OrderService {
 	public Order createOrder(NewOrderDTO dto) {
 
 		User user = userService.findById(dto.getClient().getId());
+		
+		List<Address> adr = user.getAddresses().stream().filter(a -> a.getId() == dto.getAddress().getId())
+				.collect(Collectors.toList());
+		
+		user.setAddresses(adr);
+		
 		Order order = new Order(null, Instant.now(), user, OrderStatus.WAITING_PAYMENT);
 		repo.save(order);
 		

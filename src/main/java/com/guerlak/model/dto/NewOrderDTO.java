@@ -2,6 +2,7 @@ package com.guerlak.model.dto;
 
 import java.util.List;
 
+import com.guerlak.model.Address;
 import com.guerlak.model.OrderItem;
 import com.guerlak.model.Payment;
 import com.guerlak.model.User;
@@ -14,7 +15,19 @@ public class NewOrderDTO {
 	
 	private List<OrderItem> orderItens;
 	
+	private Address address;
+	
 	public NewOrderDTO() {}
+
+	
+	public Address getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
 
 	public User getClient() {
 		return client;

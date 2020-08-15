@@ -81,16 +81,18 @@ public class UserService {
 	}
 
 	public User fromDTO(NewUserDTO userDTO) {
+		
 		User user = new User(null, userDTO.getName(), 
 				userDTO.getEmail(), 
 				userDTO.getPassword(), 
 				UserType.valueOf(userDTO.getUserType()));
 		
 		Address address = new Address(user, 
-				userDTO.getCity(), 
-				userDTO.getState(), 
-				userDTO.getComplement(),
-				userDTO.getCep());
+					userDTO.getCity(), 
+					userDTO.getState(), 
+					userDTO.getComplement(),
+					userDTO.getCep()
+				);
 		
 		user.getAddresses().add(address);
 		user.getPhones().add(userDTO.getPhone1());

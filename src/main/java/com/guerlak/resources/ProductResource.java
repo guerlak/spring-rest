@@ -49,10 +49,6 @@ public class ProductResource {
 				.map(x -> Long.parseLong(x))
 				.collect(Collectors.toList());
 		
-		for (Long long1 : idList) {
-			System.out.println(long1);
-		}
-		
 		String decodedName;
 		try {
 			decodedName = URLDecoder.decode(name, "UTF-8");
