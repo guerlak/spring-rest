@@ -1,7 +1,6 @@
 package com.guerlak.service;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -46,7 +45,9 @@ public class OrderService {
 
 		User user = userService.findById(dto.getClient().getId());
 		
-		List<Address> adr = user.getAddresses().stream().filter(a -> a.getId() == dto.getAddress().getId())
+		List<Address> adr = user.getAddresses()
+				.stream()
+				.filter(a -> a.getId() == dto.getAddress().getId())
 				.collect(Collectors.toList());
 		
 		user.setAddresses(adr);

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.guerlak.model.Address;
 import com.guerlak.model.Category;
@@ -40,12 +41,14 @@ public class TestConfig implements CommandLineRunner{
 	private OrderItemRepo orderItemRepo;
 	@Autowired
 	private AddressRepo addressRepo;
+	@Autowired
+	BCryptPasswordEncoder bcrypt;
 
 	@Override
 	public void run(String... args) throws Exception {
 		
-		User u1 = new User(null, "Maria Brown", "maria@gmail.com", "123456",UserType.PESSOA_FISICA);
-		User u2 = new User(null, "Alex Green", "alex@gmail.com", "123456", UserType.PESSOA_FISICA); 
+		User u1 = new User(null, "Maria Brown", "maria@gmail.com", bcrypt.encode("123456"),UserType.PESSOA_FISICA);
+		User u2 = new User(null, "Alex Green", "alex@gmail.com", bcrypt.encode("123456"), UserType.PESSOA_FISICA); 
 		
 		Address ad1 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro", "Onda Carioca 202 bl 4", "222222");
 		Address ad2 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro","Guedes da Fontoura, 441", "22222");

@@ -22,6 +22,7 @@ public class NewUserDTO implements Serializable {
 	@Email
 	private String email;
 
+	@NotEmpty(message = "Preenchimento obrigatório")
 	private String password;
 	
 	private String userType;

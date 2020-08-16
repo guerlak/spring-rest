@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ import com.guerlak.service.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
+	
+	@Autowired
+	private BCryptPasswordEncoder bcrypt;
 
 	@Autowired
 	private UserRepo repo;
@@ -84,7 +88,7 @@ public class UserService {
 		
 		User user = new User(null, userDTO.getName(), 
 				userDTO.getEmail(), 
-				userDTO.getPassword(), 
+				bcrypt.encode(userDTO.getPassword()), 
 				UserType.valueOf(userDTO.getUserType()));
 		
 		Address address = new Address(user, 
