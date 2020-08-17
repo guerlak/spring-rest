@@ -47,18 +47,22 @@ public class TestConfig implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		
-		User u1 = new User(null, "Maria Brown", "maria@gmail.com", bcrypt.encode("123456"),UserType.PESSOA_FISICA);
-		User u2 = new User(null, "Alex Green", "alex@gmail.com", bcrypt.encode("123456"), UserType.PESSOA_FISICA); 
+		User u1 = new User(null, "Maria Brown", "maria@gmail.com", bcrypt.encode("12345"),UserType.PESSOA_FISICA);
+		User u2 = new User(null, "Alex Green", "alex@gmail.com", bcrypt.encode("12345"), UserType.PESSOA_FISICA); 
+		User u3 = new User(null, "Rafa Leite", "guerlak@gmail.com", bcrypt.encode("aloha"), UserType.PESSOA_FISICA); 
+		u3.addProfile(com.guerlak.model.enums.Profile.ADMIN);
 		
-		Address ad1 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro", "Onda Carioca 202 bl 4", "222222");
+		userRepo.saveAll(Arrays.asList(u1, u2, u3));
+		
+		Address ad1 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro", "Onda Carioca", "222222");
 		Address ad2 = new Address(u1, "Rio e Janeiro", "Rio de Janeiro","Guedes da Fontoura, 441", "22222");
 		
 		u1.getAddresses().add(ad1);
-		u1.getAddresses().add(ad2);
+		u3.getAddresses().add(ad2);
 		
 		u1.setUserType(UserType.PESSOA_FISICA);
 		
-		userRepo.saveAll(Arrays.asList(u1, u2));
+		userRepo.saveAll(Arrays.asList(u1, u2, u3));
 		addressRepo.saveAll(Arrays.asList(ad1, ad2));
 		
 		Category cat1 = new Category(null, "Electronics");

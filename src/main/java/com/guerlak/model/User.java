@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.guerlak.model.enums.Profile;
 import com.guerlak.model.enums.UserType;
 
 @Entity
@@ -37,6 +40,11 @@ public class User implements Serializable {
 	private String password;
 
 	private int userType;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "tb_profile") // to create the table without object relation
+	private Set<Integer> profiles = new HashSet<>();
+
 
 	@ElementCollection
 	@CollectionTable(name = "tb_phone") // to create the table without object relation
@@ -50,10 +58,12 @@ public class User implements Serializable {
 	private List<Address> addresses = new ArrayList<>();
 
 	public User() {
+		addProfile(Profile.CLIENT);
 	}
 
 	public User(Long id, String name, String email, String password, UserType userType) {
 		super();
+		addProfile(Profile.CLIENT);
 		this.id = id;
 		this.name = name;
 		this.email = email;
@@ -121,6 +131,14 @@ public class User implements Serializable {
 
 	public List<Order> getOrders() {
 		return orders;
+	}
+	
+	public Set<Profile> getProfiles(){
+		return profiles.stream().map(x -> Profile.valueOf(x)).collect(Collectors.toSet());
+	}
+	
+	public void addProfile(Profile profile) {
+		this.profiles.add(profile.getCode());
 	}
 
 	@Override
