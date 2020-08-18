@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.guerlak.model.Address;
@@ -18,6 +21,8 @@ import com.guerlak.model.dto.NewOrderDTO;
 import com.guerlak.model.enums.OrderStatus;
 import com.guerlak.repositories.OrderItemRepo;
 import com.guerlak.repositories.OrderRepo;
+import com.guerlak.security.UserSS;
+import com.guerlak.service.exceptions.AuthorizationException;
 import com.guerlak.service.exceptions.ResourceNotFoundException;
 
 @Service
@@ -38,6 +43,26 @@ public class OrderService {
 	public Order findById(Long id) {
 		Optional<Order> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+	}
+	
+
+	public Page<Order> findPage(Integer page, 
+								Integer linesPerPage, 
+								String orderBy, 
+								String direction) {
+		
+		UserSS userSS = AuthService.authenticated();
+		
+		if(userSS == null) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		User user = userService.findById(userSS.getId());
+		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		
+		return repo.findByClient(user, pageRequest);
+	
 	}
 
 	@Transactional

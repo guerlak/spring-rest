@@ -2,8 +2,6 @@ package com.guerlak.config;
 
 import java.util.Arrays;
 
-import javax.annotation.security.PermitAll;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

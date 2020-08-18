@@ -24,7 +24,6 @@ public class ProductService {
 	@Autowired
 	private CategoryRepo categoryRepo;
 
-
 	public Product findById(Long id) {
 		Optional<Product> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));

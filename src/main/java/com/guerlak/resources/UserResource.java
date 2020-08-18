@@ -1,8 +1,6 @@
 package com.guerlak.resources;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -31,13 +29,6 @@ public class UserResource {
 
 	@Autowired
 	private UserService service;
-
-	@GetMapping
-	public ResponseEntity<List<UserDTO>> listUsers() {
-		List<UserDTO> list = (List<UserDTO>) service.findAll().stream().map(user -> new UserDTO(user))
-				.collect(Collectors.toList());
-		return ResponseEntity.ok().body(list);
-	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {

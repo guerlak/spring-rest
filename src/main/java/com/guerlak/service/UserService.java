@@ -1,6 +1,5 @@
 package com.guerlak.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
@@ -13,15 +12,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.guerlak.model.Address;
 import com.guerlak.model.User;
 import com.guerlak.model.dto.NewUserDTO;
 import com.guerlak.model.dto.UserDTO;
+import com.guerlak.model.enums.Profile;
 import com.guerlak.model.enums.UserType;
 import com.guerlak.repositories.AddressRepo;
 import com.guerlak.repositories.UserRepo;
+import com.guerlak.security.UserSS;
+import com.guerlak.service.exceptions.AuthorizationException;
 import com.guerlak.service.exceptions.DataIntegrityException;
 import com.guerlak.service.exceptions.ResourceNotFoundException;
 
@@ -37,11 +38,14 @@ public class UserService {
 	@Autowired
 	private AddressRepo addressRepo;
 
-	public List<User> findAll() {
-		return repo.findAll();
-	}
-
 	public User findById(Long id) {
+		
+		UserSS userSS = AuthService.authenticated();
+		
+		if(userSS == null || !userSS.hasRole(Profile.ADMIN) && !id.equals(userSS.getId())) {
+			throw new AuthorizationException("Access denied");
+		}
+		
 		Optional<User> obj = repo.findById(id);
 		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
@@ -51,7 +55,6 @@ public class UserService {
 		return repo.findAll(pageRequest);
 	}
 
-	@Transactional
 	public User addUser(User u) {
 		u.setId(null);
 		u = repo.save(u);

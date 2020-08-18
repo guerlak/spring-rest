@@ -30,6 +30,10 @@ public class UserSS implements UserDetails{
 		this.authorities = profiles.stream().map(x -> new SimpleGrantedAuthority(x.getDescription()))
 				.collect(Collectors.toList());
 	}
+	
+	public boolean hasRole(Profile profile) {
+		return getAuthorities().contains(new SimpleGrantedAuthority(profile.getDescription()));
+	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {	
